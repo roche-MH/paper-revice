@@ -24,21 +24,43 @@ Auto-encoder 의 수식에서 크게 보았을때 KL-divergence + Likelihood  �
 >
 > KL-divergence : 두 확률 분포의 차이를 계산하는 함수로, 어떤 이상적인 분포에 대해, 그 분포를 근사하는 다른 분포를 사용해 샘플링을 한다면 발생할수 있는 정보 엔트로피 차이
 
-Adversarial Diagram of  Standard GAN
+
+
+![image-20200720234627900](https://files.slack.com/files-pri/T25783BPY-F9SHTP6F9/picture2.png?pub_secret=6821873e68)
+
+> Generator  = 임의의 랜덤 데이터를 받아들여 진짜같은 가짜 데이터를 생성
+>
+> Discriminator = 실제 데이터, 가짜 데이터를 판별 (real 1, fake 0 출력)
+>
+> Fake data = Qmodel(X|Z) (랜덤값Z를 줬을때 X이미지를 내보내는 모델)
+>
+> Real data = Pdata(X)
+
+
+
+GAN 모델의 loss function
+
+GAN 네트워크가 D,G 모두가 최선의 목적을 달성할수 있도록 한다고 했다.
+
+GAN 네트워크에서의 학습이 다른 신경망과 달리 한가지의 최적화(min or max) 만을 위한것이 아님을 드러내며 다음과 같은 loss function 을 사용한다.
 
 ![image-20200720234422645](../../../../AppData/Roaming/Typora/typora-user-images/image-20200720234422645.png)
 
 
 
-![image-20200720234627900](https://files.slack.com/files-pri/T25783BPY-F9SHTP6F9/picture2.png?pub_secret=6821873e68)
+Discriminator 을 보면 D는 V(D,G)를 최대화 하도록 학습한다.
 
-> Generator  = 생성자
->
-> Fake data = Qmodel(X|Z) (Z값을 줬을때 X이미지를 내보내는 모델)
->
-> Real data = Pdata(X)
->
-> Discriminator = 판별자
+* D(x) 가 1일때 진짜 데이터를 진짜라고 판별해야하고
+* D(G(z)) 가 0일때 : 가짜 데이터를 가짜라고 판별해야한다.
+
+
+
+Generator 은 V(D,G) 를 최소화 하도록 학습한다.
+
+* D(x)는 무관하고 D가 진짜 데이터를 진짜라고 판별하는것에 개의치 않고
+* D(G(z)) 가 1일때 D가 가짜 데이터를 진짜라고 판별해야 한다.
+
+
 
 ![image-20200720234842803](../../../../AppData/Roaming/Typora/typora-user-images/image-20200720234842803.png)
 
@@ -49,3 +71,22 @@ Adversarial Diagram of  Standard GAN
 > 초록색 : real data
 
 검은 선이 P 이고 초록색이 Q 라고 했을때 generator 는 P를 Q 와 동일하게 하고자 학습을 이어나 간다. 그리고 real 과 fake 이미지가 동일시 되었을때 Discriminator 는 1/2 확률로 분류할수 밖에 없다고 한다.
+
+
+
+# Theorem
+
+p(g) = pdata 가 같을때  D*G(x) = 1/2 이 되고  1/2 를 minmax에 넣게 되면 다음과 같이 수식이 진행된다.
+
+![image-20200721001843266](../../../../AppData/Roaming/Typora/typora-user-images/image-20200721001843266.png)
+
+![image-20200721001743195](../../../../AppData/Roaming/Typora/typora-user-images/image-20200721001743195.png)
+
+> C(G) 는 D를 MAX 로 고정해 두었을때 수식
+
+![image-20200721001948039](../../../../AppData/Roaming/Typora/typora-user-images/image-20200721001948039.png)
+
+> KL-divergence를 2개 더하게 되면 JSD 와 동일하게 된다
+
+C* = -log(4) 가 C(G) 의 global minimum 이고 그 유일한 해가 pg= pdata가 된다.
+
