@@ -44,7 +44,7 @@ GAN 네트워크가 D,G 모두가 최선의 목적을 달성할수 있도록 한
 
 GAN 네트워크에서의 학습이 다른 신경망과 달리 한가지의 최적화(min or max) 만을 위한것이 아님을 드러내며 다음과 같은 loss function 을 사용한다.
 
-![image-20200720234422645](../../../../AppData/Roaming/Typora/typora-user-images/image-20200720234422645.png)
+![image-20200720234422645](https://github.com/roche-MH/paper-review/blob/master/PR-001/image/Diagram.PNG?raw=true)
 
 
 
@@ -62,7 +62,7 @@ Generator 은 V(D,G) 를 최소화 하도록 학습한다.
 
 
 
-![image-20200720234842803](../../../../AppData/Roaming/Typora/typora-user-images/image-20200720234842803.png)
+![image-20200720234842803](https://github.com/roche-MH/paper-review/blob/master/PR-001/image/discriminator.PNG?raw=true)
 
 > 파란색 : Discriminator
 >
@@ -78,13 +78,13 @@ Generator 은 V(D,G) 를 최소화 하도록 학습한다.
 
 p(g) = pdata 가 같을때  D*G(x) = 1/2 이 되고  1/2 를 minmax에 넣게 되면 다음과 같이 수식이 진행된다.
 
-![image-20200721001843266](../../../../AppData/Roaming/Typora/typora-user-images/image-20200721001843266.png)
+![image-20200721001843266](https://github.com/roche-MH/paper-review/blob/master/PR-001/image/log4.PNG?raw=true)
 
-![image-20200721001743195](../../../../AppData/Roaming/Typora/typora-user-images/image-20200721001743195.png)
+![image-20200721001743195](https://github.com/roche-MH/paper-review/blob/master/PR-001/image/CG.PNG?raw=true)
 
 > C(G) 는 D를 MAX 로 고정해 두었을때 수식
 
-![image-20200721001948039](../../../../AppData/Roaming/Typora/typora-user-images/image-20200721001948039.png)
+![image-20200721001948039](https://github.com/roche-MH/paper-review/blob/master/PR-001/image/JSD.PNG?raw=true)
 
 > KL-divergence를 2개 더하게 되면 JSD 와 동일하게 된다
 
