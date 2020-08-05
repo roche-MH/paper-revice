@@ -7,7 +7,7 @@
 | Read paper                                                   | review                                                       | Paper Implementation |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | -------------------- |
 | [Nail Polish Try-On: Realtime Semantic Segmentation of Small Objects for Native and Browser Smartphone AR Applications](https://arxiv.org/abs/1906.02222) |                                                              |                      |
-| [BeautyGAN: Instance-level Facial Makeup Transfer with Deep Generative Adversarial Network](http://liusi-group.com/projects/BeautyGAN) |                                                              |                      |
+| [BeautyGAN: Instance-level Facial Makeup Transfer with Deep Generative Adversarial Network](http://liusi-group.com/projects/BeautyGAN) |                                                              |                      | Reading
 | [Generative Adversarial Nets](https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf) | [O](https://github.com/roche-MH/paper-review/blob/master/PR-001/Generative%20Adversarial%20Nets%20%EB%A6%AC%EB%B7%B0.md) |                      |
 | [UNSUPERVISED REPRESENTATION LEARNING WITH DEEP CONVOLUTIONAL GENERATIVE ADVERSARIAL NETWORKS](https://arxiv.org/pdf/1511.06434.pdf) | [O](https://github.com/roche-MH/paper-review/blob/master/PR-001/DCGAN%20%EB%A6%AC%EB%B7%B0.md) | tensorflow,pytorch   |
 
