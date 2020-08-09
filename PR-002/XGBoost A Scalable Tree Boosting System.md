@@ -93,8 +93,8 @@ Omega : 모델 복잡도에 패널티를 부과 (회귀 나무 함수들)
 
 * 수식(2) 의 트리 앙상블 모델은 함수들을 파라미터로 가지며, 유클리드 공간에서 전통적인 최적화 방법들을 사용하여 최적화 할수 없음
 * 대신, 이 모델은 추가적인 방식으로 훈련됨
-* 형식적으로 t 번째 반복에서 i 인스턴스 예측값이 (yhat(i)^t(i)) 라고 한다
-* 우리는 다음과 같은 목적함수를 최소화 하기 위해 f(i)를 추가해야한다.
+* 형식적으로 t 번째 반복에서 i 인스턴스 예측값이 y (t) 라고 한다
+* 우리는 다음과 같은 목적함수를 최소화 하기 위해  ft 를 추가해야한다.
 
 ![image-20200808182505630](C:\Users\s_m04\AppData\Roaming\Typora\typora-user-images\image-20200808182505630.png)
 
@@ -102,6 +102,170 @@ Omega : 모델 복잡도에 패널티를 부과 (회귀 나무 함수들)
 
 ![image-20200808182518878](C:\Users\s_m04\AppData\Roaming\Typora\typora-user-images\image-20200808182518878.png)
 
-**수식**
+> 수식
+>
+> gi = ∂yˆ (t−1) l(yi, yˆ (t−1)) : 손실 함수의 1차( First Order) Gradient 통계량
+>
+> hi = ∂ 2 yˆ (t−1) l(yi, yˆ (t−1)) : 손실 함수의 2차(Second Order) Gradient 통계량
 
-* g(i)
+
+
+* 우리는 상수 Terms 제거해서 다음과 같이 단계 (t) 에서 단순화된 목적함수를 얻을수 있었다
+
+![image-20200809151059327](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809151059327.png)
+
+* 잎 (j)의 인스턴스 집합을 로 정의하겠다
+* 우리는 Regularization Term (Omega)를 확장하여 , 수식 3(바로 위) 을 다음과 같이 다시 작성할수 있었다.
+
+![image-20200809151202982](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809151202982.png)
+
+* 고정된 구조 (Structure) (q) 의 경우, 다음과 같이 잎(j) 의 최적의 가중치 w ∗ j를 계산할 수 있다.
+
+![image-20200809151301428](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809151301428.png)
+
+* 그리고 다음과 같이 해당하는 최적의 목적함수를 계산할수 있다
+
+![image-20200809151337814](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809151337814.png)
+
+* 수식 6 트리 구조 (q) 의 품질을 측정하기 위해 함수에 점수를 매기는 역할로 사용될수 있음
+* 이 점수는 보다 광범위한 목점 함수를 위해 도출된다는 점을 제외하면, 의사결정 나무를 평가하기 위한 **불순도 점수와 같다**
+* Figure 2 는 이 점수가 어떻게 계산되는지 설명해준다.
+
+![image-20200809151558557](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809151558557.png)
+
+* 수식 (6) 과 같이 해당하는 최적의 목표 함수 값을 계산할수 있음
+* 보통, **가능한 모든 트리구조를 나열하는 것은 불가능하다**
+* 대신, 한 잎에서 시작하여 반복적으로 트리를 가지에 추가하는 탐욕 알고리즘이 사용된다.
+* IL and IR 이 분할 후의 왼쪽 & 오른쪽 인스턴스 집합이라고 가정하겠음.
+* \I = IL ∪ IR, 로 놓은 다음, 분할 후의 손실 감소는 다음과 같이 주어짐 :
+
+![image-20200809151745102](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809151745102.png)
+
+* 이식은 보통 분할 후보들을 추정하는데 사용된다.
+
+
+
+**2-3. Shrinkage and Column Subsampling**
+
+* Section 2.1 에서 언급한 Regularized 목적함수 외에도, 추가적으로 **Over-fitting 을 예방하는 두가지 기법**들이 사용된다.
+
+**(1) Shrinkage**
+
+* 부스팅 트리의 각 단계 이후 마다 **새롭게 추가된 가중치를 요인  (eta) 로 Scaling 한다.**
+* Stochastic 최적화의 Learning Rate 와 유사하게, **각 개별 트리의 영향도를 감소시키고**, 모델을 향상시키기 위해 **미래 트리 공간을 남겨놓음**
+
+**(2) Column (Feature) Subsampling**
+
+* 이 기법은 Random Forest에서 흔하게 사용되지만, 이전 부스팅 트리에서는 적용되지 않았음
+* 유저 피드백에 따르면, 전통적인 Row Subsampling 보다 Over-fitting 을 더 잘 예방해 준다고한다.
+* 이 기법을 사용하면 **병렬 알고리즘 계산 속도를 가속화할수있다**
+
+
+
+**3. Split Finding Algorithms**
+
+**3-1. Basic Exact Greedy Algorithm**
+
+트리 학습의 핵심적인 문제중 하나는 수식(7) 이 나타내는 것처럼, **가장 좋은 분할을 찾는것이다.**
+
+* 그러기 위해서, 분할 탐색 알고리즘은 **모든 Features 에서 가능한 모든 분할들을 열거한다.**
+* 우리는 그것을 exact greedy algorithm 이라고 부른다.
+* 기존 단일 머신 부스팅 트리의 대부분에서는 이 알고리즘을 지원하며, Algorithm 1에서 설명한다.
+
+![image-20200809153235178](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809153235178.png)
+
+* **연속적인 Feature에 대해** 가능한 모든 분할들을 열거해야한다.
+* 효율적으로 수행하기 위해,**Feature 값에 따라 데이터를 정렬해야 하고**, 수식(7)의 **구조 점수에 대한 Gradient 통계량을 축적하기 위해 정렬된 순서에 따라 데이터를 찾아간다.**
+
+
+
+**3-2. Approximate Algorithm**
+
+* EGA는 **가능한 모든 분할 지점들을 탐욕적으로 열거하기 때문에 굉장히 강력함**
+* 하지만 메모리에 **데이터가 완전히 적합되지 못할때**, 효율적으로 수행하는 것은 **불가능**함
+* 이와 동일한 문제는 **분산된 환경**에서도 발생하게 된다.
+* 이 두가지 상황에서 효율적인 GBT를 지원하기 위해서, **근사 알고리즘(AA, Approximate Algorithm)을 사용해야 한다.**
+* 부스팅 트리의 AA 프레임 워크는 Algorithm2 에 주어짐
+
+![image-20200809154032226](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809154032226.png)
+
+* 이 알고리즘은 먼저 Feature 분포의 Percentiles에 따라 후보 분할지점을 제시함
+* 그런 다음, 연속적인 Feature를 이러한 후보 지점으로 나뉜 Bucket에 매핑하고 통계량을 집계한 다음, 집계된 통계량을 바탕으로 만들어진 Proposal 중 가장 좋은 솔루션을 찾는다.
+
+**Proposal 이 주어진 시기에 따라, 두가지 다른 버전으로 알고리즘이 나뉜다.**
+
+* Global Variant :
+  * 초기 트리 구성 단계에서 모든 후보 분할들을 제시하고, 모든 Levels에서 분할 찾기를 수행할 때 동일한 Proposals를 사용한다.
+* Local Variant :
+  * 매번 분할이 진행된 후에 다시 제시한다.
+* Proposal 단계 수 : Global < Local
+* 후보 분할 지점 갯수 : Global > Local
+  * 매번 분할이 진행된 후에 후보 분할 지점이 개선 (Refine) 되지 않기 때문임
+  * Local Proposal은 분할이 진행된 후에 후보를 개선하고, 잠재적으로 더 깊은 트리에 더 적합할수 있음
+* Figure 3을 통해 다른 알고리즘과의 비교를 보여준다.
+
+![image-20200809154943226](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809154943226.png)
+
+**3-3. Weighted Quantile Sketch**
+
+**AA의 중요한 단계중 하나는 후보 분할 지점을 제시하는 것이다.**
+
+* 보통 Feature Percentiles 는 후보들이 데이터에 균등하게 분산되도록 하기 위해 사용된다.
+* K 번째 Feature 값과 각 훈련 인스턴스의 2차 Gradient 통계량을 나타내는 다중 집합 = {(x1k, h1),(x2k, h2)· · ·(xnk, hn)}이 있다고 한다면
+* 우리는 랭크 함수 rk : R → [0, +∞) 을 다음과 같이 정의할수 있다.
+
+![image-20200809160144773](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809160144773.png)
+
+* 이는 Feature 값 k 가 z 보다 작은 인스턴스 비율을 나타낸다.
+* 목표는 후보 분할 지점 s {sk1, sk2, · · · skl}, 을 찾는 것이다.
+
+![image-20200809160310629](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809160310629.png)
+
+* (E,epsilon) : 근사치 인자 ( Appoximation Factor )
+* 직관적으로, 이는 대략 1/ E 의 후보 지점이 있다는 것을 의미한다.
+* 각 데이터 지점은 h(i) 에 의해 가중치됨
+* h(i) 가 왜 가중치를 나타내는지 보기 위해, 다음과 같이 수식(3)을 다시 작성할수 있다.
+
+![image-20200809160523146](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809160523146.png)
+
+* 이는 레이벌 g(i) / h(i) 과 가중치 h(i) 를 이용한 정확히 가중치가 적용된 제곱 손실을 의미한다.
+* 대규모 데이터셋에서, 이 기준을 만족하는 후보 분할을 찾는 것은 쉽지 않음
+* **모든 인스턴스가 동일한 가중치를 가질때,** **Quantile Sketch 이라 부르는 기존 알고리즘은 이 문제를 해결할수 있음**
+* 그러나, **가중치가 적용된 데이터셋**에 대한 **Quantile Sketch 는 존재하지 않는다.**
+* 따라서, **기존에 존재하는 부스팅 트리 알고리즘 대부분은 실패할 확률이 있거나** **이론적 보장이 없는 데이터의 무작위 Subset에 의존한다**.
+
+
+
+**이러한 문제를 해결하기 위해, Distributed Weighted Qunatile Sketch 알고리즘을 제시함**
+
+* 이 알고리즘은 provable,theoretical,guarantee 를 가지고 가중치가 적용된 데이터를 다룰수 있다.
+* 일반적인 아이디어는 각 작업에서 일정한 정확도 수준을 유지할수 있도록 보장된 상태에서 Merge and Prune 작업을 지원하는 데이터 구조를 제시한다.
+
+
+
+**3-4. Sparsity-aware Split Finding**
+
+* 실제 많은 문제들에서는 Input mathbf(x) 가 Sparese 한 것은 흔한 일이다.
+* Sparsity를 유발하는 여러 가지 가능성이 있음:
+  * 데이터 내 결측치의 존재 유무
+  * 통계량에서 빈번한 0 엔트리
+  * One-hot Encoding 같은 Feture Engineering Artifacts
+
+**데이터 내 Sparsity 패턴을 인식하는 알고리즘을 만드는 것은 중요한 일이다**
+
+* 그러기 위해, 우리는 Figure 4 처럼 각 트리 노드 마다 Default Direction을 추가하는 것을 제시함
+* Sparse 행렬 mathbf(x) 에서 값이 누락 되었을 경우, 인스턴스는 Default Direction으로 분류를 수행함
+
+![image-20200809162148558](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809162148558.png)
+
+* 최적의 Default Direction 은 데이터에서 학습되며, Algorithm 3 에서 설명한다.
+
+![image-20200809162230815](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809162230815.png)
+
+* 핵심적으로 개선한 것은 결측되지 않은 엔트리 lk 만 방문하는 것
+* 제시된 알고리즘에서는 존재하지 않는 값을 결측치로 처리하고, 결측치를 다루는 가장 좋은 Direction을 학습함
+* 우리가 알고 있는 한도 내에서, 기존 트리 학습 알고리즘 대부분은 Dense한 데이터에만 최적화 되거나, 범주형 (Categorical) Encoding 같은 제한된 경우들을 다루는 구체적인 절차들이 필요함
+* XGBoost 는 모든 Sparsity 패턴을 통합된 방식으로 다룬다.
+* Figure 5 는 Sparsity 인식 알고리즘과 Naive 한 구현 알고리즘을 비교함
+
+![image-20200809162432639](../../../../AppData/Roaming/Typora/typora-user-images/image-20200809162432639.png)
