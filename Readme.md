@@ -1,9 +1,6 @@
 # Paper review
 
 
-
-**1년에 100개의 논문을 읽는 목표로 시작 **
-
 | Read paper                                                   | review                                                       | Paper Implementation                                         |
 | ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [Nail Polish Try-On: Realtime Semantic Segmentation of Small Objects for Native and Browser Smartphone AR Applications](https://arxiv.org/abs/1906.02222) | N                                                            | [Toyproject](https://github.com/roche-MH/project/tree/master/nail%20detection) |
