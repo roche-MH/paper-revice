@@ -11,4 +11,5 @@
 | Time-Series Aware Precision and Recall for Anomaly DetectionL Considering Variety of Detection Result and Addressing Ambiguous Labeling | N                                                            | [Dacon](https://github.com/roche-MH/Competition/tree/master/Dacon/%EB%B3%B4%EC%95%88%ED%83%90%EC%A7%80) |
 | DECOUPLED WEIGHT DECAY REGULARIZATION (AdamW&SGDW)           | [Y](https://github.com/roche-MH/paper-review/blob/master/PR-003/Decoupled%20weight%20decay%20regularization(AdamW%2CAdamWR%2CSGDW%2CSGDWR).md)                                                            | [Dacon](https://github.com/roche-MH/Competition/tree/master/Dacon/%EB%B3%B4%EC%95%88%ED%83%90%EC%A7%80) |
 | Faster R-CNN Towards Real-Time Object Detection with Region Proposal Networks          | N                                                            |  |
+| YOLOv3 An Incremental Improvement          | N                                                            |  |
 
