@@ -15,6 +15,4 @@
 | YOLOv4 Optimal Speed and Accuracy of Object Detection          | N                                                            |  |
 | Scaled-Yolov4 Scaling Cross Stage Partial Network          | N                                                            |  |
 | EfficientDet Scalable and Efficient Object Detection          | N                                                            |  |
-| Unsupervised Anomaly Detection with
-Generative Adversarial Networks to Guide
-Marker Discovery          | N                                                            |  |
+| Unsupervised Anomaly Detection with Generative Adversarial Networks to Guide Marker Discovery          | N                                                            |  |
